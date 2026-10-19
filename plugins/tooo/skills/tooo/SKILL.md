@@ -27,9 +27,9 @@ description: "tooo is the user's personal to-do list and focus timer, reached th
 
 2.7 今日最重要 important_today：同一时刻只有一条，设置时同时排到今天。
 
-2.8 专注：一次计时。模式为 pomodoro（番茄，默认 25 分钟工作加 5 分钟休息）或 stopwatch（正计时）。
+2.8 专注：一次计时。模式为 pomodoro（番茄，默认 25 分钟工作加 5 分钟休息）或 stopwatch（正计时）。同一时间可以有几件事在计时，其中一件在前台，其余在后台；番茄的工作和休息时长只是目标，到点只提醒，阶段只在用户（或你按用户的话）调用 start_break、end_break 时改变。
 
-2.9 用时记录：一段有起止时刻的时间，来源为 timer（计时产生）或 manual（补记）。
+2.9 用时记录：一段有起止时刻的时间，来源为 timer（计时产生）、manual（补记）或 rest（番茄休息）。background=true 的一段是和前台那件同时进行的时间：算进这件事自己的用时，不算进当天、当周的总时长。
 
 2.10 视图 view：list_tasks 的筛选方式。
 
@@ -46,15 +46,18 @@ description: "tooo is the user's personal to-do list and focus timer, reached th
 | 步骤与重复 | `add_step` | task_id*、title* | 加在步骤列表末尾。task_id 可以是任何一层的任务或步骤。 |
 | 步骤与重复 | `set_repeat` | id*、repeat* | repeat 为 {freq: daily 或 weekly, weekdays}，null 表示停止重复。weekdays 用 0 到 6，0 为周日。 |
 | 现在做什么 | `what_now` | 无 | 返回最该做的一件事 action、理由 why 和候选 candidates。顺序是正在专注的、今日最重要的、再按优先级和日期打分。 |
-| 专注计时 | `start_focus` | task_id*、mode | mode 不给就用设置里的开始方式。给的是带步骤的任务，就接着做进行中的那一步，没有就从第一个未完成的步骤开始（步骤用正计时）。给的是某个步骤，就开始那个步骤。 |
-| 专注计时 | `focus_status` | 无 | 当前专注的事项、番茄序号、剩余时间、这件事累计用时。 |
-| 专注计时 | `pause_focus` | 无 | 暂停正在跑的计时，事项和已计时间保留。 |
-| 专注计时 | `resume_focus` | task_id | 接着暂停的计时。同时有几件暂停着时用 task_id 指定，不给就接最近暂停的。 |
-| 专注计时 | `stop_focus` | done | 结束当前计时。done=true 同时把这件事标记完成，默认只停计时。 |
+| 专注计时 | `start_focus` | task_id*、mode、parallel | 默认开始会暂停前台那件；parallel=true 时前台那件转到后台接着走，这件放到前台。对已在后台走的事调用，就是把它拉到前台。mode 不给就用设置里的开始方式。给的是带步骤的任务，就接着做进行中的那一步，没有就从第一个未完成的步骤开始（步骤用正计时）；给的是某个步骤，就开始那个步骤。 |
+| 专注计时 | `focus_status` | 无 | front 是前台那件，background 是同时在走的其余几件（最近放到后台的在前），next 是刚完成一步后的「接下来」；每件带标题、累计分钟（含后台）、番茄阶段、超出目标的分钟 overrun_minutes、能否撤销。 |
+| 专注计时 | `pause_focus` | task_id | task_id 不给是前台那件。事项和已计时间保留。前台那件停下后，后台最近放下的那件顶到前台。 |
+| 专注计时 | `resume_focus` | task_id、parallel | 接着暂停的计时。不给 task_id：前台有事在走时什么都不做，否则接最近暂停的那件。给了 task_id：接着那件，parallel 同 start_focus。 |
+| 专注计时 | `stop_focus` | task_id、done | 结束一件事的计时，task_id 不给是前台那件。done=true 同时把这件事标记完成，默认只停计时。 |
+| 专注计时 | `cancel_focus` | task_id | 撤销开始：删掉这次开始以后记的时间，把这件事放回开始前的样子，被它暂停的那件接着走。只对正在走的事有效，task_id 不给是前台那件。 |
+| 专注计时 | `start_break` | task_id | 番茄从工作进入休息：工作在这一刻结束（超出目标的部分照样记上），休息开始计时。不在工作阶段时什么都不做。 |
+| 专注计时 | `end_break` | task_id | 结束休息。只结束休息，不开始下一颗；要开始下一颗时调 resume_focus 或 start_focus。 |
 | 专注计时 | `get_focus_settings` | 无 | 返回 work_minutes、break_minutes、mode。 |
 | 专注计时 | `set_focus_settings` | work_minutes、break_minutes、mode | 至少给一项，没给的不变。work_minutes 为 1 到 180，break_minutes 为 1 到 60。以后新开的计时用新设置。返回改完后的全部设置。 |
-| 用时记录 | `add_time_entry` | date*、start*、end*、task_id、label | 补记一段已经过去的时间。task_id 记到某件事上，没有对应事项时写 label。 |
-| 用时记录 | `day_timeline` | date | 某天按钟点的记录：起止、事项、大类、来源。还在计的一条 end 为 null。 |
+| 用时记录 | `add_time_entry` | date*、start*、end*、task_id、label | 补记一段已经过去的时间，整段都记下：和别的事已有记录重叠的部分记成同时进行（后台），只跳过和这件事自己已有记录重叠的部分。返回实际记下的各段 segments 和一句现成的说明 note。task_id 记到某件事上，没有对应事项时写 label。 |
+| 用时记录 | `day_timeline` | date | 某天按钟点的记录：起止、事项、大类、来源、是否同时进行（background）。还在计的一条 end 为 null。total_minutes 只算前台。 |
 | 复盘 | `day_summary` | date | 某天做完的、没做完的、今日最重要、每件的分钟数、主动计时总分钟数 focus_minutes_total（番茄休息的 rest_minutes_total 不算在内）。computer 是电脑自动记录的用时，没有数据时为 null。 |
 | 复盘 | `get_weekly_review` | 无 | 本周（周一到周日）完成数、计时和休息分钟数、按大类的用时，加上最近一次存下的周反思和本周计划。 |
 | 复盘 | `save_weekly_review` | reflection、plan | 至少给一项，只给一项时另一项沿用上一次的。纯文本，可多行。 |
@@ -75,7 +78,7 @@ description: "tooo is the user's personal to-do list and focus timer, reached th
 
 注：不再要做的事可用 update_task 改为 type=trash，任务仍保留。
 
-4.6 add_time_entry 只可补记已经过去的时间，起止应在同一天，且不应与已有记录重叠。
+4.6 add_time_entry 只可补记已经过去的时间，起止应在同一天。用户说的整段应原样传入，不应为避开已有记录而自行截短；回复用户时应依据返回的 segments 和 note 说明实际记下的时间。
 
 4.7 remind 的时刻应晚于当前时间，否则工具返回错误。
 
