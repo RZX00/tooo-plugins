@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "tooo": {
+      "type": "http",
+      "url": "https://app.tooo.site/mcp"
+    }
+  }
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "tooo",
+  "version": "0.1.0",
+  "description": "Connect your AI assistant to tooo: read and write tasks, run the focus timer, log time and review the week. The tooo account owner approves the connection on their own device.",
+  "author": {
+    "name": "tooo",
+    "url": "https://tooo.site"
+  },
+  "homepage": "https://tooo.site",
+  "repository": "https://github.com/RZX00/tooo-plugins",
+  "license": "MIT",
+  "keywords": ["todo", "tasks", "focus-timer", "pomodoro", "mcp"],
+  "extensions": {
+    "com.openai": {
+      "interface": {
+        "displayName": "tooo",
+        "shortDescription": "To-do list and focus timer your AI can read and write",
+        "longDescription": "tooo is a personal to-do list and focus timer. This plugin lets your AI assistant list, add, change and complete tasks and steps, start and pause the focus timer, log time, read the day and week review, and set reminders. The account owner approves the connection on their own device.",
+        "developerName": "tooo",
+        "category": "Productivity",
+        "capabilities": ["Read", "Write"],
+        "websiteURL": "https://tooo.site",
+        "defaultPrompt": [
+          "What should I do now in tooo?",
+          "Add a task to tooo for tomorrow at 09:00 and remind me.",
+          "Summarize how I spent today with tooo."
+        ],
+        "brandColor": "#262626",
+        "composerIcon": "./assets/icon.png",
+        "logo": "./assets/icon.png"
+      }
+    }
+  }
+}

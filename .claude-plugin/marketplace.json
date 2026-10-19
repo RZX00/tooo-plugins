@@ -1,0 +1,17 @@
+{
+  "name": "tooo-plugins",
+  "description": "Plugins that connect your AI assistant to tooo, a to-do list and focus timer. 让 AI 助手接入 tooo 待办和计时的插件。",
+  "owner": {
+    "name": "tooo",
+    "url": "https://tooo.site"
+  },
+  "plugins": [
+    {
+      "name": "tooo",
+      "source": "./plugins/tooo",
+      "description": "Read and write your tooo tasks, run the focus timer, log time and review the week from your AI assistant. 让 AI 助手读写 tooo 的任务、计时、用时记录和周复盘。",
+      "category": "productivity",
+      "tags": ["todo", "tasks", "focus-timer", "pomodoro", "mcp"]
+    }
+  ]
+}

@@ -1,0 +1,15 @@
+{
+  "name": "tooo",
+  "displayName": "tooo",
+  "version": "0.1.0",
+  "description": "Connect your AI assistant to tooo: read and write tasks, run the focus timer, log time and review the week. The tooo account owner approves the connection on their own device.",
+  "author": {
+    "name": "tooo",
+    "url": "https://tooo.site"
+  },
+  "homepage": "https://tooo.site",
+  "repository": "https://github.com/RZX00/tooo-plugins",
+  "license": "MIT",
+  "keywords": ["todo", "tasks", "focus-timer", "pomodoro", "mcp"],
+  "icon": "./assets/icon.png"
+}

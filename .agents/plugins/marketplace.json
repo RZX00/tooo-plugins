@@ -1,0 +1,20 @@
+{
+  "name": "tooo-plugins",
+  "interface": {
+    "displayName": "tooo"
+  },
+  "plugins": [
+    {
+      "name": "tooo",
+      "source": {
+        "source": "local",
+        "path": "./plugins/tooo"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Productivity"
+    }
+  ]
+}
