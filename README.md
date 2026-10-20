@@ -128,16 +128,16 @@ Claude Code 里输入 `/mcp`，选 tooo 登录；Codex 里新开会话，按提�
 <details>
 <summary>只加连接，不装插件</summary>
 
-只有连接，没有技能那份说明。连接地址都是 `https://app.tooo.site/mcp`。
+只有连接，没有技能那份说明。连接地址都是 `https://app.tooo.site/mcp`。前三条直连做法，tooo 官网[连接页](https://tooo.site/connect/)标为「未验证」（按各家公开文档写的，没有实测）；Hermes Agent 的密钥方式标为「已验证」。
 
 | 客户端 | 做法 |
 |---|---|
 | Claude 应用 | 打开 [这个链接](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=tooo&connectorUrl=https%3A%2F%2Fapp.tooo.site%2Fmcp)，表单已填好，点 Add，再点 Connect。在网页或桌面端加一次，手机登录同一账号后就能用。 |
 | Claude Code | `claude mcp add --transport http --scope user tooo https://app.tooo.site/mcp`，然后在会话里输入 `/mcp` 登录。 |
 | Codex | `codex mcp add tooo --url https://app.tooo.site/mcp`，然后 `codex mcp login tooo`。IDE 扩展走这一条。 |
-| Hermes Agent、脚本 | 在 tooo 的「更多 → 设备」里生成命令行密钥（`tk_` 开头），请求头写 `Authorization: Bearer tk_…`。Codex 里可写成 `bearer_token_env_var = "TOOO_KEY"`，把密钥放在环境变量里。密钥不要写进任务或对话。 |
+| Hermes Agent | 在 tooo 的「更多 → 设备」里生成命令行密钥（`tk_` 开头），按[连接页](https://tooo.site/connect/)上 Hermes 一栏写进它的配置。密钥不要写进任务或对话。 |
 
-其他客户端见 <https://tooo.site/connect/>，那里逐个标了是否验证过。
+其他客户端也见连接页，那里逐个标了是否验证过。
 
 </details>
 

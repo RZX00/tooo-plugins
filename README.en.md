@@ -128,16 +128,16 @@ The assistant reaches your account through `https://app.tooo.site/mcp` (Streamab
 <details>
 <summary>Connector only, no plugin</summary>
 
-Connection only, without the skill's explanations. The connector address is `https://app.tooo.site/mcp` everywhere.
+Connection only, without the skill's explanations. The connector address is `https://app.tooo.site/mcp` everywhere. tooo's [connect page](https://tooo.site/connect/) marks the first three direct routes as "Not yet tested" (written from each vendor's public docs, not tried); the key route for Hermes Agent is marked "Verified".
 
 | Client | How |
 |---|---|
 | Claude apps | Open [this link](https://claude.ai/customize/connectors?modal=add-custom-connector&connectorName=tooo&connectorUrl=https%3A%2F%2Fapp.tooo.site%2Fmcp) (the form is pre-filled), click Add, then Connect. Add it once on the web or desktop, and it is available on your phone when you sign in with the same account. |
 | Claude Code | `claude mcp add --transport http --scope user tooo https://app.tooo.site/mcp`, then sign in with `/mcp` inside a session. |
 | Codex | `codex mcp add tooo --url https://app.tooo.site/mcp`, then `codex mcp login tooo`. The IDE extension uses this route. |
-| Hermes Agent, scripts | Generate a command-line key (starts with `tk_`) under More → Devices in tooo and send `Authorization: Bearer tk_…`. In Codex, set `bearer_token_env_var = "TOOO_KEY"` and keep the key in that environment variable. Never put the key in a task or a conversation. |
+| Hermes Agent | Generate a command-line key (starts with `tk_`) under More → Devices in tooo, and put it in Hermes's config as the Hermes entry on the [connect page](https://tooo.site/connect/) shows. Never put the key in a task or a conversation. |
 
-For other clients see <https://tooo.site/connect/>, which marks each one as verified or not.
+Other clients are on the connect page too, each marked as verified or not.
 
 </details>
 
